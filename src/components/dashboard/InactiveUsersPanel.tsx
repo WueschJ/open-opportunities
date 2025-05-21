@@ -61,8 +61,7 @@ const InactiveUsersPanel = ({
         <div className="rounded-md border">
           <div className="grid grid-cols-12 gap-4 p-4 bg-muted/50 font-medium">
             <div className="col-span-4 md:col-span-3">Name</div>
-            <div className="hidden md:block md:col-span-2">Company</div>
-            <div className="col-span-5 md:col-span-3">Email</div>
+            <div className="col-span-5 md:col-span-5">Email</div>
             <div className="hidden md:block md:col-span-2 text-center">Tag</div>
             <div className="hidden md:block md:col-span-2 text-center">Nudged</div>
           </div>
@@ -72,13 +71,11 @@ const InactiveUsersPanel = ({
                 key={user.id} 
                 className={`grid grid-cols-12 gap-4 p-4 items-center transition-all duration-500 ${user.fading ? 'opacity-0' : 'opacity-100'}`}
               >
-                <div className="col-span-4 md:col-span-3 font-medium truncate">
-                  {user.name}
+                <div className="col-span-4 md:col-span-3 font-medium">
+                  <div className="truncate">{user.name}</div>
+                  <div className="text-xs text-muted-foreground truncate">{user.company}</div>
                 </div>
-                <div className="hidden md:block md:col-span-2 text-sm text-muted-foreground truncate">
-                  {user.company}
-                </div>
-                <div className="col-span-5 md:col-span-3 flex items-center gap-1 truncate">
+                <div className="col-span-5 md:col-span-5 flex items-center gap-1 truncate">
                   <span className="truncate">{user.email}</span>
                   <CopyButton value={user.email} className="ml-auto md:ml-2" />
                 </div>
