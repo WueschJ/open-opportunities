@@ -22,16 +22,15 @@ const EnrichedUsersPanel = ({
   return (
     <Card className="col-span-1">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold">Recently Enriched Users</CardTitle>
+        <CardTitle className="text-lg font-semibold">Recently Enriched Users: {users.length}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="rounded-md border">
           <div className="p-4 bg-muted/50 font-medium">
             <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-4 md:col-span-3">Name</div>
-              <div className="col-span-5 md:col-span-3">Email</div>
-              <div className="col-span-3 md:col-span-2 text-center">Assigned</div>
-              <div className="hidden md:block md:col-span-2 text-center">Actions</div>
+              <div className="col-span-4 md:col-span-4">Name</div>
+              <div className="col-span-5 md:col-span-4">Email</div>
+              <div className="hidden md:block md:col-span-2 text-center">Tag</div>
               <div className="hidden md:block md:col-span-2 text-center">Dismiss</div>
             </div>
           </div>
@@ -39,15 +38,12 @@ const EnrichedUsersPanel = ({
             {users.map((user) => (
               <div key={user.id} className="p-4">
                 <div className="grid grid-cols-12 gap-4 items-center mb-2">
-                  <div className="col-span-4 md:col-span-3 font-medium truncate">
+                  <div className="col-span-4 md:col-span-4 font-medium truncate">
                     {user.name}
                   </div>
-                  <div className="col-span-5 md:col-span-3 flex items-center gap-1">
+                  <div className="col-span-5 md:col-span-4 flex items-center gap-1">
                     <span className="truncate">{user.email}</span>
                     <CopyButton value={user.email} className="ml-auto md:ml-2" />
-                  </div>
-                  <div className="col-span-3 md:col-span-2 text-center">
-                    {user.assignedTo || "—"}
                   </div>
                   <div className="col-span-6 md:col-span-2 flex justify-center mt-2 md:mt-0">
                     <TagSelector
