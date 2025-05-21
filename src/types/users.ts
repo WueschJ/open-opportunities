@@ -3,6 +3,7 @@ export interface InactiveUser {
   id: string;
   name: string;
   email: string;
+  company: string; // Added company field
   inactiveSince: string; // ISO date string
   assignedTo?: string;
   nudged: boolean;
@@ -13,6 +14,7 @@ export interface EnrichedUser {
   id: string;
   name: string;
   email: string;
+  company: string; // Added company field
   news: string;
   enrichedAt: string; // ISO date string
   assignedTo?: string;
