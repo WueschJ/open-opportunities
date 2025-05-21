@@ -6,6 +6,7 @@ export interface InactiveUser {
   inactiveSince: string; // ISO date string
   assignedTo?: string;
   nudged: boolean;
+  fading?: boolean; // For animation when removing
 }
 
 export interface EnrichedUser {
@@ -16,4 +17,5 @@ export interface EnrichedUser {
   enrichedAt: string; // ISO date string
   assignedTo?: string;
   dismissed: boolean;
+  fading?: boolean; // For animation when removing
 }

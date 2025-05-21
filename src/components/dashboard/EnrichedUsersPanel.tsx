@@ -1,4 +1,5 @@
 
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import CopyButton from "@/components/CopyButton";
@@ -19,10 +20,42 @@ const EnrichedUsersPanel = ({
   onUserTagged,
   onUserDismissed
 }: EnrichedUsersPanelProps) => {
+  // Filter to show only non-dismissed users or those that haven't faded out yet
+  const [visibleUsers, setVisibleUsers] = useState<EnrichedUser[]>(users);
+  
+  // Update visible users when the users prop changes
+  useEffect(() => {
+    setVisibleUsers(users.filter(user => !user.dismissed));
+  }, [users]);
+
+  const handleUserDismissed = (userId: string, isDismissed: boolean) => {
+    if (isDismissed) {
+      // Find the user to fade out
+      const userToFade = visibleUsers.find(user => user.id === userId);
+      if (userToFade) {
+        // Mark the user to fade out
+        setVisibleUsers(prev => 
+          prev.map(user => user.id === userId ? { ...user, fading: true } : user)
+        );
+        
+        // After the animation completes, remove the user from the visible list
+        setTimeout(() => {
+          setVisibleUsers(prev => prev.filter(user => user.id !== userId));
+        }, 500); // 500ms to match the CSS transition
+      }
+    }
+    
+    // Call the original handler
+    onUserDismissed(userId, isDismissed);
+  };
+
   return (
     <Card className="col-span-1">
-      <CardHeader>
-        <CardTitle className="text-lg font-semibold">Recently Enriched Users: {users.length}</CardTitle>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-lg font-semibold">Recently Enriched Users</CardTitle>
+        <Badge variant="outline" className="bg-primary/10 ml-auto">
+          {users.filter(user => !user.dismissed).length}
+        </Badge>
       </CardHeader>
       <CardContent>
         <div className="rounded-md border">
@@ -35,8 +68,11 @@ const EnrichedUsersPanel = ({
             </div>
           </div>
           <div className="divide-y">
-            {users.map((user) => (
-              <div key={user.id} className="p-4">
+            {visibleUsers.map((user) => (
+              <div 
+                key={user.id} 
+                className={`p-4 transition-all duration-500 ${user.fading ? 'opacity-0' : 'opacity-100'}`}
+              >
                 <div className="grid grid-cols-12 gap-4 items-center mb-2">
                   <div className="col-span-4 md:col-span-4 font-medium truncate">
                     {user.name}
@@ -56,7 +92,7 @@ const EnrichedUsersPanel = ({
                     <Checkbox
                       checked={user.dismissed}
                       onCheckedChange={(checked) => 
-                        onUserDismissed(user.id, checked as boolean)
+                        handleUserDismissed(user.id, checked as boolean)
                       }
                     />
                   </div>
@@ -73,7 +109,7 @@ const EnrichedUsersPanel = ({
               </div>
             ))}
             
-            {users.length === 0 && (
+            {visibleUsers.length === 0 && (
               <div className="p-6 text-center text-muted-foreground">
                 No enriched users found
               </div>
